@@ -35,10 +35,17 @@ class App extends Component {
       imageUrl:"",
       box:{},
       route:"signIn",
-      isSignedIn:false
+      isSignedIn:false,
+      user:{
+        id:'',
+        name:'',
+        surname:'',
+        email:'',
+        entries:0,
+      }
     }
   }
-
+  
   calculateImageBox(data){
     const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
     const image = document.getElementById("mainImage");
@@ -63,9 +70,22 @@ class App extends Component {
     this.setState({imageUrl:this.state.input});
 
     app.models.predict(Clarifai.FACE_DETECT_MODEL,this.state.input)
-    .then(response=>this.setFaceBox(this.calculateImageBox(response)))
+    .then(response=>{
+      if(response){
+        fetch('http://localhost:3000/image',{
+          method:'put',
+          headers:{'Content-type':'application/json'},
+          body:JSON.stringify({
+            id:this.state.user.id
+          })
+        })
+        .then(response=>response.json())
+        .then(count=>this.setState(Object.assign(this.state.user,{entries:count})))
+      }
+      this.setFaceBox(this.calculateImageBox(response))
+    })
     .catch(err=>console.log(err));
-
+    
   }
 
   onRouteChange=(newRoute)=>{
@@ -78,9 +98,20 @@ class App extends Component {
 
     this.setState({route:newRoute})
   }
+  onLoadUser=(data)=>{
+    this.setState({user:{
+      id:data.id,
+      name:data.name,
+      surname:data.surname,
+      email:data.email,
+      entries:data.entries,
+    }
+  })
+  console.log(this.state.user);
+  }
 
   render(){
-    const {imageUrl,box,isSignedIn} = this.state;
+    const {imageUrl,box,isSignedIn,user} = this.state;
     return (
       <div>
         <Particles className="particles" params={particlesParameters}/>
@@ -89,15 +120,17 @@ class App extends Component {
           this.state.route==="signIn"
           ?<SignIn 
              onRouteChange={this.onRouteChange}
+             onLoadUser={this.onLoadUser}
             />
           :(
             this.state.route==="register"
             ?<Register 
               onRouteChange={this.onRouteChange}
+              onLoadUser={this.onLoadUser}
               />
             :<div>
               <Logo/>
-              <Rank/>
+              <Rank name={user.name} entries={user.entries}/>
               <ImageLinkForm 
                 onInputChange={this.onInputChange} 
                 onButtonSubmit={this.onButtonSubmit}
