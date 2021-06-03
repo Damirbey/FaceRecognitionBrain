@@ -52,7 +52,6 @@ class App extends Component {
     }
   }
   setFaceBox(boxObj){
-    console.log(boxObj.rightCol+" "+boxObj.leftCol+" "+boxObj.bottomRow+" "+boxObj.topRow);
     this.setState({box:boxObj})
   }
 
