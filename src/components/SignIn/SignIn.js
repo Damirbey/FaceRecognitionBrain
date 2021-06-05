@@ -26,7 +26,7 @@ class SignIn extends Component{
         })
         .then(response=>response.json())
         .then(data=>{
-            if(data!=="User not found")
+            if(data!=="Wrong credentials Entered")
             {
                 this.props.onRouteChange("home");
                 this.props.onLoadUser(data);

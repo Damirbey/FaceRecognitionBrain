@@ -76,7 +76,7 @@ class App extends Component {
           method:'put',
           headers:{'Content-type':'application/json'},
           body:JSON.stringify({
-            id:this.state.user.id
+            email:this.state.user.email
           })
         })
         .then(response=>response.json())
