@@ -23,7 +23,7 @@ class Register extends Component{
         this.setState({registerPassword:event.target.value});
     }
     registerNewUser=()=>{
-        fetch('http://localhost:3000/register',{
+        fetch('https://rocky-sea-98675.herokuapp.com/register',{
             method:'post',
             headers:{'Content-Type':'application/json'},
             body:JSON.stringify({
