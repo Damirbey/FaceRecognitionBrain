@@ -13,7 +13,7 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-particles-js": "^3.4.1",
-    "react-scripts": "^1.1.5",
+    "react-scripts": "2.0.0-next.3e165448",
     "react-tilt": "^0.1.4",
     "tachyons": "^4.12.0",
     "web-vitals": "^1.1.2"
